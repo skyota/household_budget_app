@@ -1,0 +1,108 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ユーザーテーブル
+model User {
+  id              Int      @id @default(autoincrement())
+  supabaseUserId  String   @unique
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  income          Int
+  savingGoal      Int
+  categoryBudgets CategoryBudget[]
+  fixedCosts      FixedCost[]
+  households      Household[]
+}
+
+// カテゴリーテーブル
+model CategoryBudget {
+  id           Int       @id @default(autoincrement())
+  userId       Int
+  name         String
+  budgetAmount Int
+  displayColor String
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expenses     Expense[]
+}
+
+// 支出テーブル
+model Expense {
+  id         Int            @id @default(autoincrement())
+  categoryId Int
+  amount     Int
+  date       DateTime
+  note       String?
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
+  category   CategoryBudget @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+}
+
+// 固定費テーブル
+model FixedCost {
+  id        Int    @id @default(autoincrement())
+  userId    Int
+  name      String
+  amount    Int
+  billCycle String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// 家計テーブル
+model Household {
+  id           Int         @id @default(autoincrement())
+  userId       Int
+  incomeRange  IncomeRange
+  savingGoal   Int
+  status       Status
+  isNamePublic Boolean
+  isPublic     Boolean
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  user         User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// 年収帯の選択肢（2000万円まで100万円刻み）
+enum IncomeRange {
+  UNDER_1000000
+  FROM_1000000_TO_2000000
+  FROM_2000000_TO_3000000
+  FROM_3000000_TO_4000000
+  FROM_4000000_TO_5000000
+  FROM_5000000_TO_6000000
+  FROM_6000000_TO_7000000
+  FROM_7000000_TO_8000000
+  FROM_8000000_TO_9000000
+  FROM_9000000_TO_10000000
+  FROM_10000000_TO_11000000
+  FROM_11000000_TO_12000000
+  FROM_12000000_TO_13000000
+  FROM_13000000_TO_14000000
+  FROM_14000000_TO_15000000
+  FROM_16000000_TO_17000000
+  FROM_17000000_TO_18000000
+  FROM_18000000_TO_19000000
+  FROM_19000000_TO_20000000
+  OVER_20000000
+}
+
+// ステータスの選択肢
+enum Status {
+  SINGLE                @map("一人暮らし")
+  LIVING_WITH_PARENTS   @map("実家暮らし")
+  MARRIED_NO_CHILD      @map("既婚・子供なし")
+  MARRIED_ONE_CHILD     @map("既婚・子供1人")
+  MARRIED_TWO_CHILDREN  @map("既婚・子供2人")
+  MARRIED_THREE_OR_MORE @map("既婚・子供3人以上")
+  COUPLE_CO_HABITING    @map("同棲（未婚）")
+  OTHER                 @map("その他")
+}
