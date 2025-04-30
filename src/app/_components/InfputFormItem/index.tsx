@@ -9,7 +9,7 @@ type Props = {
   error?: string;
 } & ComponentProps<"input">
 
-const FormItem = forwardRef<HTMLInputElement, Props>(({ label, name, type, error, ...rest }, ref) => {
+const InfputFormItem = forwardRef<HTMLInputElement, Props>(({ label, name, type, error, ...rest }, ref) => {
   return (
     <div className="w-full max-w-72 flex flex-col gap-2">
       <label
@@ -31,4 +31,4 @@ const FormItem = forwardRef<HTMLInputElement, Props>(({ label, name, type, error
   )
 });
 
-export default FormItem;
+export default InfputFormItem;
