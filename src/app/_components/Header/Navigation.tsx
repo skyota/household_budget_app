@@ -52,13 +52,13 @@ const Navigation: React.FC = () => {
           {session ? (
             <>
               <div className="flex items-center h-[inherit] sm:hidden">
-                <Link href="/signup" className="text-fontcolor text-xl font-bold px-3 h-[inherit] block flex items-center">
+                <Link href="/expenses" className="text-fontcolor text-xl font-bold px-3 h-[inherit] block flex items-center">
                   支出一覧
                 </Link>
-                <Link href="/login" className="text-fontcolor text-xl font-bold px-3 h-[inherit] block flex items-center">
+                <Link href="/settings" className="text-fontcolor text-xl font-bold px-3 h-[inherit] block flex items-center">
                   金額設定
                 </Link>
-                <Link href="/login" className="text-fontcolor text-xl font-bold px-3 h-[inherit] block flex items-center">
+                <Link href="/households" className="text-fontcolor text-xl font-bold px-3 h-[inherit] block flex items-center">
                   公開家計一覧
                 </Link>
                 <button onClick={handleLogout} className="text-fontcolor text-xl font-bold px-3 h-[inherit] block flex items-center">
@@ -70,13 +70,13 @@ const Navigation: React.FC = () => {
                   <div className="fixed inset-0 bg-black/50 z-40 transition-opacity duration-300" onClick={() => setIsOpen(false)}></div>
                 )}
                 <div className={`bg-white fixed top-0 right-0 w-60 h-[100vh] py-16 divide-y divide-gray z-50 transform transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}>
-                  <Link href="/signup" className="block text-fontcolor text-xl font-bold px-3 py-4">
+                  <Link href="/expenses" className="block text-fontcolor text-xl font-bold px-3 py-4">
                     支出一覧
                   </Link>
-                  <Link href="/login" className="block text-fontcolor text-xl font-bold px-3 py-4">
+                  <Link href="/settings" className="block text-fontcolor text-xl font-bold px-3 py-4">
                     金額設定
                   </Link>
-                  <Link href="/login" className="block text-fontcolor text-xl font-bold px-3 py-4">
+                  <Link href="/households" className="block text-fontcolor text-xl font-bold px-3 py-4">
                     公開家計一覧
                   </Link>
                   <button onClick={handleLogout} className="block text-fontcolor text-xl font-bold px-3 py-4 w-full text-left">
