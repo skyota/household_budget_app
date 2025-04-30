@@ -23,6 +23,7 @@ type ButtonAsButton = CommonProps & {
 type ButtonAsLink = CommonProps & {
   as: "link";
   href: string;
+  target?: string;
 };
 
 type ButtonProps = ButtonAsButton | ButtonAsLink;
@@ -40,7 +41,7 @@ const Button: React.FC<ButtonProps> = ({ children, variant = "blue", className, 
   const combinedClassName = clsx(baseClasses, variantClasses[variant], className);
 
   if (rest.as === "link") {
-    return <Link href={rest.href} className={combinedClassName}>{ children }</Link>
+    return <Link href={rest.href} target={rest.target} className={combinedClassName}>{ children }</Link>
   }
   return <button type={rest.type || 'button'} className={combinedClassName} {...rest}>{ children }</button>
 }
