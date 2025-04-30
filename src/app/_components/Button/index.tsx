@@ -18,6 +18,7 @@ type ButtonAsButton = CommonProps & {
   as?: "button";
   type?: "button" | "submit" | "reset";
   onClick?: () => void;
+  disabled?: boolean;
 };
 // <Link>要素として使う場合の型
 type ButtonAsLink = CommonProps & {

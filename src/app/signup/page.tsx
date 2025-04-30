@@ -87,7 +87,7 @@ const SignupPage = () => {
                 })}
               />
             </div>
-            <Button type='submit' variant='blue'>新規登録</Button>
+            <Button type='submit' variant='blue' disabled={isSubmitting}>新規登録</Button>
             <div className='flex flex-col gap-2 items-center w-full'>
               <p className='font-bold text-fontcolor text-center'>アカウントをお持ちの方</p>
               <Button as='link' href='/login' variant='border'>ログイン</Button>
