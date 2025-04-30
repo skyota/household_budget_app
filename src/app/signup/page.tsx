@@ -26,7 +26,7 @@ const SignupPage = () => {
         data: {
           name: name,
         },
-        emailRedirectTo: 'http://localhost:3000/login',
+        emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/login`
       },
     });
 
