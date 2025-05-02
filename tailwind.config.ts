@@ -9,9 +9,21 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        fontcolor: '#333333',
+        gray: '#E1E1E1',
+        bgGray: '#F0F0F5',
+        mainBlue: '#3B37FD',
+        white: '#FFFFFF',
       },
+      fontFamily: {
+        sans: ['"Noto Sans JP"', 'sans-serif'],
+      },
+    },
+    screens: {
+      // PCファースト設計（max-width）
+      lg: { max: '1023px' }, // 1023px以下を対象（＝タブレット以下）
+      md: { max: '767px' },  // 767px以下を対象（＝スマホ）
+      sm: { max: '639px' },  // 639px以下を対象（＝小型スマホ）
     },
   },
   plugins: [],
