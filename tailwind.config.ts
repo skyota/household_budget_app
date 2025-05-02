@@ -14,6 +14,9 @@ const config: Config = {
         bgGray: '#F0F0F5',
         mainBlue: '#3B37FD',
         white: '#FFFFFF',
+        red: '#EC5249',
+        green: '#66D14D',
+        yellow: '#FFA621',
       },
       fontFamily: {
         sans: ['"Noto Sans JP"', 'sans-serif'],
