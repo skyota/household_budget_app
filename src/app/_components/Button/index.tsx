@@ -35,7 +35,7 @@ const Button: React.FC<ButtonProps> = ({ children, variant = "blue", className, 
   // variantによって異なるクラスを定義
   const variantClasses = {
     blue: "bg-mainBlue border-mainBlue text-white hover:bg-white hover:text-mainBlue hover:border-mainBlue",
-    yellow: "bg-yellow-500 text-white hover:bg-yellow-600",
+    yellow: "bg-yellow text-white hover:bg-yellow-600",
     border: "border-mainBlue text-mainBlue hover:bg-mainBlue hover:text-white",
   };
   // clsxを使ってクラス名を結合
