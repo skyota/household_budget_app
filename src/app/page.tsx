@@ -113,6 +113,15 @@ const Top: React.FC = () => {
           </div>
         </div>
       </section>
+      <section className='bg-white rounded-tl-[40px] rounded-tr-[40px]'>
+        <div className='inner py-10 flex flex-col items-center gap-10 md:py-5 md:gap-7'>
+          <p className='text-base text-fontcolor font-bold leading-relaxed text-center'>
+            毎月の支出がなんとなくで<br className="hidden md:block" />終わっていませんか？<br />
+            BudgetNaviなら、貯金ができる<br className="hidden md:block" />予算設計が今日から始められます
+          </p>
+          <Button as='link' href='/signup' variant='blue'>使ってみる</Button>
+        </div>
+      </section>
     </div>
   )
 }
