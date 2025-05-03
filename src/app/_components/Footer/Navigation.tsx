@@ -2,15 +2,10 @@
 
 import Link from "next/link";
 import Image from 'next/image';
-import { supabase } from "@/utils/supabase";
 import { useSupabaseSession } from '@/app/_hooks/useSupabaseSession';
+import { handleLogout } from "@/app/_utils/auth";
 
 const Navigation: React.FC = () => {
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-    window.location.href = '/logout';
-  }
-
   const { session, isLoading } = useSupabaseSession();
 
   return (
