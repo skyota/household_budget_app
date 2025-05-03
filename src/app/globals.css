@@ -6,6 +6,16 @@
 
 @layer utilities {
   .inner {
-    @apply w-full mx-auto px-[25px] max-w-[1180px] md:max-w-none md:px-5;
+    @apply w-full mx-auto px-[25px] max-w-[1230px] md:max-w-none md:px-5;
+  }
+
+  @layer utilities {
+    .bg-mv-pc {
+      background-image: url('/images/mv-bg.png');
+    }
+  
+    .bg-mv-sp {
+      background-image: url('/images/mv-bg-sp.png');
+    }
   }
 }
