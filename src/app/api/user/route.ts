@@ -40,3 +40,32 @@ export const POST = async (req: NextRequest) => {
 
   return NextResponse.json({ user: createdUser }, { status: 201 });
 };
+
+export const PATCH = async (req: NextRequest) => {
+  const token = req.headers.get('Authorization')?.replace('Bearer ', '');
+  if (!token) {
+    return NextResponse.json({ error: 'アクセストークンがありません' }, { status: 401 });
+  }
+
+  const { data: { user }, error } = await supabase.auth.getUser(token);
+  if ( error || !user ) {
+    return NextResponse.json({ error: '認証情報が無効です' }, { status: 401 });
+  }
+
+  const body = await req.json();
+  const { income, savingGoal } = body;
+
+  try {
+    const updatedUser = await prisma.user.update({
+      where: { supabaseUserId: user.id },
+      data: {
+        income: income ?? undefined,
+        savingGoal: savingGoal ?? undefined,
+      },
+    });
+
+    return NextResponse.json({ user: updatedUser }, { status: 200 });
+  } catch (err: any) {
+    return NextResponse.json({ error: err.message }, { status: 500 });
+  }
+};
