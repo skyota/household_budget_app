@@ -20,11 +20,22 @@ const LoginPage = () => {
   const onSubmit: SubmitHandler<LoginForm> = async (data: LoginForm) => {
     const  { email, password } = data;
 
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    const { data: loginData, error } = await supabase.auth.signInWithPassword({ email, password });
 
     if (error) {
       alert("ログインに失敗しました");
     } else {
+      const accessToken = loginData.session?.access_token;
+      console.log('accessToken:', accessToken);
+      if (accessToken) {
+        await fetch('/api/user', {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+      }
+
       reset();
       router.push('/mypage');
     }
