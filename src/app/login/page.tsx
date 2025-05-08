@@ -26,6 +26,7 @@ const LoginPage = () => {
       alert("ログインに失敗しました");
     } else {
       const accessToken = loginData.session?.access_token;
+      console.log('Access Token:', accessToken);
       if (accessToken) {
         await fetch('/api/user', {
           method: 'POST',
