@@ -1,13 +1,8 @@
+import { supabase } from '@/app/_utils/supabase';
 import { PrismaClient } from '@prisma/client';
-import { createClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 
 const prisma = new PrismaClient();
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
 
 export const GET = async (req: NextRequest) => {
   const token = req.headers.get('Authorization')?.replace('Bearer ', '');
