@@ -70,20 +70,21 @@ export const DELETE = async (
   const expenseId = parseInt(id);
   if (isNaN(expenseId)) return NextResponse.json({ error: '無効なIDです' }, { status: 400 });
 
-  // Supabase IDに対応するアプリ内ユーザーを取得
-  const dbUser = await prisma.user.findUnique({
-    where: { supabaseUserId: user.id },
-  });
-  if (!dbUser) return NextResponse.json({ error: 'ユーザーが見つかりません' }, { status: 404 });
-
   // 削除対象のexpenseが存在する、かつログインユーザーのものであることを確認
   const existing = await prisma.expense.findUnique({
-    where: { id: expenseId },
+    where: {
+      category: {
+        user: {
+          supabaseUserId: user.id
+        }
+      },
+      id: expenseId
+    },
     include: {
       category: true,
     },
   });
-  if (!existing || existing.category.userId !== dbUser.id) return NextResponse.json({ error: 'アクセス権がありません' }, { status: 403 });
+  if (!existing) return NextResponse.json({ error: 'アクセス権がありません' }, { status: 403 });
 
   try {
     await prisma.expense.delete({
