@@ -18,27 +18,30 @@ export const PUT = async (
   const expenseId = parseInt(id);
   if (isNaN(expenseId)) return NextResponse.json({ error: '無効なIDです' }, { status: 400 });
 
-  // Supabase IDに対応するアプリ内ユーザーを取得
-  const dbUser = await prisma.user.findUnique({
-    where: { supabaseUserId: user.id },
-  });
-  if (!dbUser) return NextResponse.json({ error: 'ユーザーが見つかりません' }, { status: 404 });
-
-  // 更新対象のexpenseが存在する、かつログインユーザーのものであることを確認
-  const existing = await prisma.expense.findUnique({
-    where: { id: expenseId },
-    include: {
-      category: true,
-    },
-  });
-  if (!existing || existing.category.userId !== dbUser.id) return NextResponse.json({ error: 'アクセス権がありません' }, { status: 403 });
-
   try {
     const body = await req.json();
     const { categoryId, amount, date, note } = body;
 
+    // categoryIdからcategoryBudgetを取得し、userIdが一致しているか確認
+    const category = await prisma.categoryBudget.findUnique({
+      where: {
+        id: categoryId,
+        user: {
+          supabaseUserId: user.id,
+        },
+      },
+    });
+    if (!category) return NextResponse.json({ error: '不正なカテゴリです' }, { status: 403 });
+
     const updated = await prisma.expense.update({
-      where: { id: expenseId },
+      where: {
+        id: expenseId,
+        category: {
+          user: {
+            supabaseUserId: user.id,
+          },
+        },
+      },
       data: {
         categoryId,
         amount,

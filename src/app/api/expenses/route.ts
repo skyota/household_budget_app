@@ -16,17 +16,13 @@ export const GET = async (req: NextRequest) => {
   const { data: { user }, error } = await getUser(req);
   if (error || !user) return NextResponse.json({ error: '認証情報が無効です' }, { status: 401 });
 
-  // ユーザー取得
-  const dbUser = await prisma.user.findUnique({
-    where: { supabaseUserId: user.id },
-  });
-  if (!dbUser) return NextResponse.json({ error: 'ユーザーが見つかりません' }, { status: 404 });
-
   try {
     const expenses = await prisma.expense.findMany({
       where: {
         category: {
-          userId: dbUser.id,
+          user: {
+            supabaseUserId: user.id,
+          },
         },
       },
       include: {
@@ -59,10 +55,15 @@ export const POST = async (req: NextRequest) => {
     const { categoryId, amount, date, note }: CreateExpneseRequestBody = body;
 
     const category = await prisma.categoryBudget.findUnique({
-      where: { id: categoryId },
+      where: {
+        id: categoryId,
+        user: {
+          supabaseUserId: user.id,
+        },
+      },
     });
-    if (!category || category.userId !== dbUser.id) {
-      return NextResponse.json({ error: 'アクセス権がありません' }, { status: 403 });
+    if (!category) {
+      return NextResponse.json({ error: '不正なカテゴリです' }, { status: 403 });
     }
 
     const expense = await prisma.expense.create({

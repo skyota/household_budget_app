@@ -18,17 +18,16 @@ export const PUT = async (
   const categoryBudgetId = parseInt(id);
   if (isNaN(categoryBudgetId)) return NextResponse.json({ error: '無効なIDです' }, { status: 400 });
 
-  // Supabase IDに対応するアプリ内ユーザーを取得
-  const dbUser = await prisma.user.findUnique({
-    where: { supabaseUserId: user.id },
-  });
-  if (!dbUser) return NextResponse.json({ error: 'ユーザーが見つかりません' }, { status: 404 });
-
   // 更新対象のcategoryBudgetが存在する、かつログインユーザーのものであることを確認
   const existing = await prisma.categoryBudget.findUnique({
-    where: { id: categoryBudgetId },
+    where: {
+      id: categoryBudgetId,
+      user: {
+        supabaseUserId: user.id,
+      },
+    },
   });
-  if (!existing || existing.userId !== dbUser.id) return NextResponse.json({ error: 'アクセス権がありません' }, { status: 403 });
+  if (!existing) return NextResponse.json({ error: 'アクセス権がありません' }, { status: 403 });
 
   try {
     const body = await req.json();
@@ -63,17 +62,16 @@ export const DELETE = async (
   const categoryBudgetId = parseInt(id);
   if (isNaN(categoryBudgetId)) return NextResponse.json({ error: '無効なIDです' }, { status: 400 });
 
-  // Supabase IDに対応するアプリ内ユーザーを取得
-  const dbUser = await prisma.user.findUnique({
-    where: { supabaseUserId: user.id },
-  });
-  if (!dbUser) return NextResponse.json({ error: 'ユーザーが見つかりません' }, { status: 404 });
-
   // 削除対象のcategoryBudgetが存在する、かつログインユーザーのものであることを確認
   const existing = await prisma.categoryBudget.findUnique({
-    where: { id: categoryBudgetId },
+    where: {
+      id: categoryBudgetId,
+      user: {
+        supabaseUserId: user.id,
+      },
+    },
   });
-  if (!existing || existing.userId !== dbUser.id) return NextResponse.json({ error: 'アクセス権がありません' }, { status: 403 });
+  if (!existing) return NextResponse.json({ error: 'アクセス権がありません' }, { status: 403 });
 
   try {
     await prisma.categoryBudget.delete({

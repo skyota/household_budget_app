@@ -18,19 +18,17 @@ export const DELETE = async (
   const fixedCostId = parseInt(id);
   if (isNaN(fixedCostId)) return NextResponse.json({ error: '無効なIDです' }, { status: 401 });
 
-  // Supabase IDに対応するアプリ内ユーザーを取得
-  const dbUser = await prisma.user.findUnique({
-    where: { supabaseUserId: user.id },
-  });
-
-  if (!dbUser) return NextResponse.json({ error: 'ユーザーが見つかりません' }, { status: 404 });
-
   // 削除対象のfixedCostが存在する、かつログインユーザーのものであることを確認
   const fixedCost = await prisma.fixedCost.findUnique({
-    where: { id: fixedCostId },
+    where: {
+      id: fixedCostId,
+      user: {
+        supabaseUserId: user.id,
+      },
+    },
   });
 
-  if (!fixedCost || fixedCost.userId !== dbUser.id) return NextResponse.json({ error: 'アクセス権がありません' }, { status: 403 });
+  if (!fixedCost) return NextResponse.json({ error: '固定費が見つかりません' }, { status: 403 });
 
   try {
     await prisma.fixedCost.delete({
@@ -58,17 +56,16 @@ export const PUT = async (
   const fixedCostId = parseInt(id);
   if (isNaN(fixedCostId)) return NextResponse.json({ error: '無効なIDです' }, { status: 400 });
 
-  // ユーザー取得
-  const dbUser = await prisma.user.findUnique({
-    where: { supabaseUserId: user.id },
-  });
-  if (!dbUser) return NextResponse.json({ error: 'ユーザーが見つかりません' }, { status: 404 });
-
   // 対象レコードの所有権確認
   const existing = await prisma.fixedCost.findUnique({
-    where: { id: fixedCostId },
+    where: {
+      id: fixedCostId,
+      user: {
+        supabaseUserId: user.id,
+      },
+    },
   });
-  if (!existing || existing.userId !== dbUser.id) return NextResponse.json({ error: 'アクセス権がありません' }, { status: 403 });
+  if (!existing) return NextResponse.json({ error: '固定費が見つかりません' }, { status: 403 });
 
   try {
     const body = await req.json();
