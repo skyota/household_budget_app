@@ -15,15 +15,13 @@ export const GET = async (req: NextRequest) => {
   const { data: { user }, error } = await getUser(req);
   if (error || !user) return NextResponse.json({ error: '認証情報が無効です' }, { status: 401 });
 
-  // ユーザー取得
-  const dbUser = await prisma.user.findUnique({
-    where: { supabaseUserId: user.id },
-  });
-  if (!dbUser) return NextResponse.json({ error: 'ユーザーが見つかりません' }, { status: 404 });
-
   try {
     const categoryBudgets = await prisma.categoryBudget.findMany({
-      where: { userId: dbUser.id },
+      where: {
+        user: {
+          supabaseUserId: user.id,
+        },
+      },
       orderBy: { createdAt: 'desc' },
     });
 
