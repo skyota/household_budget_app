@@ -14,8 +14,8 @@ model User {
   supabaseUserId  String   @unique
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
-  income          Int
-  savingGoal      Int
+  income          Int?
+  savingGoal      Int?
   categoryBudgets CategoryBudget[]
   fixedCosts      FixedCost[]
   households      Household[]
