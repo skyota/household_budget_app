@@ -2,7 +2,7 @@
 
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
-import { supabase } from '@/utils/supabase';
+import { supabase } from "@/app/_utils/supabase";
 import FormItem from '@/app/_components/InfputFormItem';
 import Button from '../_components/Button';
 import Link from "next/link";
