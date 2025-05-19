@@ -1,27 +1,11 @@
 "use client";
 
 import useSWR from "swr";
-import { useSupabaseSession } from "@/app/_hooks/useSupabaseSession";
+import { api } from "@/app/_utils/api";
 
 const useFetch = <T,>(url: string) => {
-  const { token } = useSupabaseSession();
-
-  const fetcher = async (url: string) => {
-    const res = await fetch(url, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
-      },
-    });
-
-    if (!res.ok) throw new Error("API Error");
-    return res.json();
-  };
-
-  const shouldFetch = token && url;
-
-  const { data, error, isLoading } = useSWR<T>(shouldFetch ? url : null, fetcher);
-
+  const fetcher = (url: string) => api.get<T>(url);
+  const { data, error, isLoading } = useSWR<T>(url, fetcher);
   return { data, error, isLoading };
 };
 
