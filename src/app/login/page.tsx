@@ -2,8 +2,8 @@
 
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
-import { supabase } from '@/utils/supabase';
-import FormItem from '@/app/_components/InfputFormItem';
+import { supabase } from "@/app/_utils/supabase";
+import InputFormItem from '@/app/_components/InputFormItem';
 import Button from '../_components/Button';
 import Link from "next/link";
 
@@ -47,8 +47,8 @@ const LoginPage = () => {
         <div className="bg-white px-6 py-12">
           <h2 className='text-xl font-bold text-fontcolor text-center'>ログイン</h2>
           <form onSubmit={handleSubmit(onSubmit)} className="mt-5 flex flex-col gap-6 items-center">
-            <div className="flex flex-col gap-6 w-full mx-auto items-center">
-              <FormItem
+            <div className="flex flex-col gap-6 w-full max-w-72 mx-auto items-center">
+              <InputFormItem
                 label="メールアドレス"
                 name="email"
                 type="email"
@@ -63,7 +63,7 @@ const LoginPage = () => {
                   },
                 })}
               />
-              <FormItem
+              <InputFormItem
                 label="パスワード"
                 name="password"
                 type="password"
