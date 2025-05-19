@@ -6,14 +6,17 @@ const getToken = async () => {
 };
 
 export const api = {
-  get: async (url: string) => {
+  get: async <T>(url: string): Promise<T> => {
     const token = await getToken();
-    return await fetch(url, {
+    const res = await fetch(url, {
       method: 'GET',
       headers: {
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
       },
     });
+
+    const data = await res.json();
+    return data
   },
 
   post: async <T>(url: string, body: T) => {
@@ -40,13 +43,16 @@ export const api = {
     });
   },
 
-  delete: async (url: string) => {
+  delete: async <T>(url: string): Promise<T> => {
     const token = await getToken();
-    return await fetch(url, {
+    const res = await fetch(url, {
       method: 'DELETE',
       headers: {
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
       },
     });
+
+    const data = await res.json();
+    return data
   }
 };
