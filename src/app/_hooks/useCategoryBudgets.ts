@@ -1,13 +1,5 @@
 import useFetch from "@/app/_hooks/useFetch";
-
-export interface CategoryBudget {
-  id: number;
-  name: string;
-  budgetAmount: number;
-  displayColor: string;
-  createdAt: string;
-  updatedAt: string;
-}
+import type { CategoryBudget } from "@/app/_types/CategoryBudget";
 
 const useCategoryBudgets = () => useFetch<{ categoryBudgets: CategoryBudget[] }>("/api/category_budgets");
 
