@@ -79,6 +79,7 @@ const EditModal = ({ isOpen, onClose, expense }: EditModalProps) => {
           label="日付"
           name="date"
           error={errors.date?.message}
+          disabled={isSubmitting}
           {...register("date", { required: "日付は必須です" })}
         />
         <CategorySelectFormItem
@@ -86,6 +87,7 @@ const EditModal = ({ isOpen, onClose, expense }: EditModalProps) => {
           name="categoryId"
           options={data.categoryBudgets}
           error={errors.categoryId?.message}
+          disabled={isSubmitting}
           {...register("categoryId", {
             required: "カテゴリーは必須です",
             valueAsNumber: true,
