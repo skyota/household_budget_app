@@ -1,6 +1,11 @@
 import { getUser } from "@/app/_utils/getUser";
 import { PrismaClient } from "@prisma/client"
 import { NextRequest, NextResponse } from "next/server";
+import type { Expense } from "@/app/_types/Expense";
+
+export type ExpensesResponse = {
+  expenses: Expense[];
+};
 
 const prisma = new PrismaClient();
 
@@ -37,7 +42,7 @@ export const GET = async (req: NextRequest) => {
       ]
     });
 
-    return NextResponse.json({ expenses });
+    return NextResponse.json<ExpensesResponse>({ expenses });
   } catch (error) {
     if (error instanceof Error) return NextResponse.json({ error: error.message }, { status: 500 });
   }
