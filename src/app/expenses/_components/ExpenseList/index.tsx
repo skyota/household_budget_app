@@ -67,8 +67,9 @@ const ExpenseList = ({ selectedPeriod, onChange }: Props) => {
       </table>
       {editingExpense && (
         <EditModal
-          expense={editingExpense}
+          isOpen={!!editingExpense}
           onClose={() => setEditingExpense(null)}
+          expense={editingExpense}
         />
       )}
     </div>

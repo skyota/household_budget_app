@@ -9,10 +9,12 @@ import DateInputFormItem from "@/app/_components/DateInputFormItem";
 import CategorySelectFormItem from "@/app/_components/CategorySelectFormItem";
 import InputFormItem from "@/app/_components/InputFormItem";
 import Button from "@/app/_components/Button";
+import Modal from "@/app/_components/Modal";
 
 interface EditModalProps {
-  expense: Expense;
+  isOpen: boolean
   onClose: () => void;
+  expense: Expense;
 }
 
 interface EditFormValues {
@@ -22,7 +24,7 @@ interface EditFormValues {
   note?: string;
 }
 
-const EditModal = ({ expense, onClose }: EditModalProps) => {
+const EditModal = ({ isOpen, onClose, expense }: EditModalProps) => {
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<EditFormValues>({
     defaultValues: {
       date: expense.date.slice(0, 10),
@@ -71,68 +73,60 @@ const EditModal = ({ expense, onClose }: EditModalProps) => {
   if (error || !data) return <p>カテゴリーの取得に失敗しました</p>;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg w-[364px] px-8 py-7 relative">
-        <button
-          onClick={onClose}
-          className="absolute -top-10 right-2 text-white text-2xl font-bold"
-        >
-          ✕
-        </button>
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col items-center gap-4 w-full">
-          <DateInputFormItem
-            label="日付"
-            name="date"
-            error={errors.date?.message}
-            {...register("date", { required: "日付は必須です" })}
-          />
-          <CategorySelectFormItem
-            label="カテゴリー"
-            name="categoryId"
-            options={data.categoryBudgets}
-            error={errors.categoryId?.message}
-            {...register("categoryId", {
-              required: "カテゴリーは必須です",
+    <Modal isOpen={isOpen} onClose={onClose}>
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col items-center gap-4 w-full">
+        <DateInputFormItem
+          label="日付"
+          name="date"
+          error={errors.date?.message}
+          {...register("date", { required: "日付は必須です" })}
+        />
+        <CategorySelectFormItem
+          label="カテゴリー"
+          name="categoryId"
+          options={data.categoryBudgets}
+          error={errors.categoryId?.message}
+          {...register("categoryId", {
+            required: "カテゴリーは必須です",
+            valueAsNumber: true,
+          })}
+        />
+        <div className="flex items-end w-full gap-2">
+          <InputFormItem
+            label="金額"
+            name="amount"
+            type="number"
+            error={errors.amount?.message}
+            disabled={isSubmitting}
+            {...register("amount", {
+              required: "金額は必須です",
               valueAsNumber: true,
+              min: {
+                value: 1,
+                message: "1円以上を入力してください",
+              },
             })}
           />
-          <div className="flex items-end w-full gap-2">
-            <InputFormItem
-              label="金額"
-              name="amount"
-              type="number"
-              error={errors.amount?.message}
-              disabled={isSubmitting}
-              {...register("amount", {
-                required: "金額は必須です",
-                valueAsNumber: true,
-                min: {
-                  value: 1,
-                  message: "1円以上を入力してください",
-                },
-              })}
-            />
-            <p className="font-normal text-fontcolor pb-2">円</p>
-          </div>
-          <InputFormItem
-            label="内容"
-            name="note"
-            type="text"
-            placeholder="使用用途を入力してください（任意）"
-            error={errors.note?.message}
-            disabled={isSubmitting}
-            {...register("note")}
-          />
-          <Button type="submit" variant="blue">登録</Button>
-          <Button
-            variant="yellow"
-            onClick={handleDelete}
-          >
-            削除
-          </Button>
-        </form>
-      </div>
-    </div>
+          <p className="font-normal text-fontcolor pb-2">円</p>
+        </div>
+        <InputFormItem
+          label="内容"
+          name="note"
+          type="text"
+          placeholder="使用用途を入力してください（任意）"
+          error={errors.note?.message}
+          disabled={isSubmitting}
+          {...register("note")}
+        />
+        <Button type="submit" variant="blue">登録</Button>
+        <Button
+          variant="yellow"
+          onClick={handleDelete}
+        >
+          削除
+        </Button>
+      </form>
+    </Modal>
   )
 }
 
